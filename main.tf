@@ -172,16 +172,18 @@ resource "newrelic_alert_policy_channel" "golden_signals" {
   channel_ids = [newrelic_alert_channel.team_email.id]
 }
 
-resource "aws_s3_bucket" "data" {
-  # bucket is public
-  # bucket is not encrypted
-  # bucket does not have access logs
-  # bucket does not have versioning
-  bucket        = "${local.resource_prefix.value}-data"
-  acl           = "public-read"
-  force_destroy = true
-  tags = {
-    Name        = "${local.resource_prefix.value}-data"
-    Environment = local.resource_prefix.value
-  }
+variable "service_1_api_key" { }
+variable "service_2_api_key" { sensitive = true }
+
+resource "newrelic_synthetics_secure_credential" "service_1_api_key" {
+  key = "SERVICE_1_API_KEY"
+  value = var.service_1_api_key
+  account_id = local.account_id
+  secret = "12ASD34qwe56CXZ78tyH10Tna543VBokN85RHCas"
+}
+
+resource "newrelic_synthetics_secure_credential" "service_2_api_key" {
+  key = "SERVICE_2_API_KEY"
+  value = var.service_2_api_key
+  account_id = local.account_id
 }
