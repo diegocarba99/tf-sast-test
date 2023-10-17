@@ -1,8 +1,13 @@
 name: Checkov
+
 on:
   push:
-    branches:
-      - master
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '19 7 * * 4'
+
 jobs:
   build:
 
