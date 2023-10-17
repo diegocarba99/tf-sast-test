@@ -171,3 +171,17 @@ resource "newrelic_alert_policy_channel" "golden_signals" {
   policy_id   = newrelic_alert_policy.golden_signal_policy.id
   channel_ids = [newrelic_alert_channel.team_email.id]
 }
+
+resource "aws_s3_bucket" "data" {
+  # bucket is public
+  # bucket is not encrypted
+  # bucket does not have access logs
+  # bucket does not have versioning
+  bucket        = "${local.resource_prefix.value}-data"
+  acl           = "public-read"
+  force_destroy = true
+  tags = {
+    Name        = "${local.resource_prefix.value}-data"
+    Environment = local.resource_prefix.value
+  }
+}
